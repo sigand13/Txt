@@ -1,126 +1,49 @@
-function setTimer(year,month,day,hour,minute,eventname,textcolor,bgcolor,size){
-	hour=(hour=="")?00:hour;
-	minute=(minute=="")?00:minute;
-	Year=year;
-	Month=month;
-	Day=day;
-	Hour=hour;
-	Minute=minute;
-	eventName=eventname;
-	Textcolor=textcolor;
-	Bgcolor=bgcolor;
-	BoxSize=size;
-	Size=size;
-	
-	x = new Date(year,month,day,hour,minute);
-	timeThen = x.getTime();
-	
-	if(eventName==""){
-		var months=new Array("Januari","Februari","Mars","April","Maj","Juni","Juli","Augusti","September","Oktober","November","December");
-		hour=(hour.length<2)?"0"+hour:hour;
-		minute=(minute.length<2)?"0"+minute:minute;
-		eventName = day+" "+months[month]+" "+year+" kl "+hour+":"+minute;
-		}else{eventName = eventName;
-		}
-	appendCssFile();
-	createDiv(Textcolor,Bgcolor,BoxSize);
-	createlink(Textcolor);
-	timer();
-	updateTimer = setInterval('timer()',1000);
-	}
-	
-function createlink(Textcolor){
-	var st=document.getElementById("showtimer");
-	var linkToTimer=document.createElement('a');
-	linkToTimer.href='http://www.raknatid.se';
-	linkToTimer.setAttribute('id','timerlink');
-	linkToTimer.setAttribute('style','color: #'+Textcolor+';');
-	linkToTimer.setAttribute('title','Fler nedräkningar');
-	st.appendChild(linkToTimer);
-	}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Nedräkning</title>
+  <style>
+    body {
+      background-color: #000000;
+      color: #FFFFFF;
+      font-size: 24px;
+      text-align: center;
+      padding-top: 20%;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="timerbox">Laddar...</div>
+  <script>
+    window.onload = function () {
+      function startCountdown(targetDate, message) {
+        const box = document.getElementById("timerbox");
 
-	
-function timer(){
-	t = new Date();
-	timeNow = t.getTime();
-	timeLeft = timeThen-timeNow;
-	if(timeLeft>=0){
-		formTime(timeLeft,Size);
-		document.getElementById("timerlink").innerHTML=showTimeLeft;
-	}else{
-		//clearInterval(updateTimer);
-		formTime("0",Size);
-		document.getElementById("timerlink").innerHTML=noTimeLeft;//var showtimer istället för timerlink, linkstart+not...+linkend
-		}
-	document.getElementById("countto").innerHTML=eventName;
-	}
-	
-	
-function formTime(ms,size){
-	daysLeft = parseInt(ms/86400000);
-	ms = parseInt(ms%86400000);
-	hoursLeft = parseInt(ms/3600000);
-	ms = parseInt(ms%3600000);
-	minutesLeft = parseInt(ms/60000);
-	ms = parseInt(ms%60000);
-	secondsLeft = parseInt(ms/1000);
-	if(size=="small"){
-		dayslabel=(daysLeft==1)?" dag ":" dagar ";
-		hourslabel=" h ";
-		minuteslabel=" min ";
-		secondslabel=" sek";
-	}else{
-		dayslabel=(daysLeft==1)?" dag ":" dagar ";
-		hourslabel=(hoursLeft==1)?" timme ":" timmar ";
-		minuteslabel=(minutesLeft==1)?" minut ":" minuter ";
-		secondslabel=(secondsLeft==1)?" sekund ":" sekunder ";
-	}
-	noTimeLeft = "0"+dayslabel+"0"+hourslabel+"0"+minuteslabel+"0"+secondslabel;
-	showTimeLeft = daysLeft+dayslabel+hoursLeft+hourslabel+minutesLeft+minuteslabel+secondsLeft+secondslabel;
-	}
-	
-function appendCssFile(){
-	var headID = document.getElementsByTagName("head")[0];
-	var cssNode = document.createElement('link');
-	cssNode.type = 'text/css';
-	cssNode.rel = 'stylesheet';
-	cssNode.href = 'http://www.raknatid.se/ner/yourtimer.css';
-	headID.appendChild(cssNode);
-	}
-	
-function createDiv(Textcolor,Bgcolor,BoxSize){
-	var colorstyle="color: #"+Textcolor+"; background-color: #"+Bgcolor+";";
-	var Boxsize="box"+BoxSize;
-	var timerboxsize=document.getElementById("timerbox");
-	timerboxsize.setAttribute('class',Boxsize);
-	timerboxsize.setAttribute('style',colorstyle);
-	
-	var counterSize="timer"+BoxSize;
-	var divShowTimer=document.createElement("div");
-	divShowTimer.id = 'showtimer';
-	divShowTimer.setAttribute("class",counterSize);
-	document.getElementById("timerbox").appendChild(divShowTimer);
-	
-	var countToSize="countto"+BoxSize;
-	var divCountTo=document.createElement("div");
-	divCountTo.setAttribute("id","countto");
-	divCountTo.setAttribute("class",countToSize);
-	document.getElementById("timerbox").appendChild(divCountTo);
-	}
-	
+        function update() {
+          const now = new Date();
+          const diff = targetDate - now;
 
-	
-	
-	
-	/**************************
-	
-	Så här ser koden ut på webbsidan:
-	
-<div id="timerbox"></div>
-<script type="text/javascript" src="yourtimer.js"></script>
-<script type="text/javascript">
-setTimer('2009','11','24','15','00','Kalle Anka','000000','aaaaff','large');
-</script>
+          if (diff <= 0) {
+            box.textContent = message;
+            return;
+          }
 
-	
-	**************************/
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+          const minutes = Math.floor((diff / (1000 * 60)) % 60);
+          const seconds = Math.floor((diff / 1000) % 60);
+
+          box.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+          setTimeout(update, 1000);
+        }
+
+        update();
+      }
+
+      const sommarlov = new Date(2025, 4, 12, 8, 10); // Maj = 4
+      startCountdown(sommarlov, "SOMMARLOV");
+    };
+  </script>
+</body>
+</html>
