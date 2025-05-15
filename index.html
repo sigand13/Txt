@@ -17,7 +17,7 @@
       height: 40px;
       background-color: #444;
       border-radius: 20px;
-      margin: 40px auto;
+      margin: 20px auto;
       overflow: hidden;
     }
 
@@ -27,29 +27,39 @@
       background-color: #00FF00;
       transition: width 1s linear;
     }
+
+    #percent-text {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
   <div id="timerbox">Laddar...</div>
+  <div id="percent-text"></div>
   <div id="progress-container">
     <div id="progress-bar"></div>
   </div>
 
   <script>
     window.onload = function () {
-     const startDate = new Date(2025, 4, 15, 0, 0); // 15 maj 2025 kl. 00:00
-      const endDate = new Date(2025, 5, 12, 8, 10); // 12 juni 2025 kl. 08:10
+      const startDate = new Date(2025, 4, 15, 0, 0); // 15 maj 2025
+      const endDate = new Date(2025, 5, 12, 8, 10);  // 12 juni 2025 kl. 08:10
+
       const box = document.getElementById("timerbox");
       const bar = document.getElementById("progress-bar");
+      const percentText = document.getElementById("percent-text");
 
       function update() {
         const now = new Date();
         const total = endDate - startDate;
         const remaining = endDate - now;
+        const elapsed = now - startDate;
 
         if (remaining <= 0) {
           box.textContent = "SOMMARLOV";
           bar.style.width = "100%";
+          percentText.textContent = "100% klart!";
           return;
         }
 
@@ -58,8 +68,9 @@
         const minutes = Math.floor((remaining / (1000 * 60)) % 60);
         const seconds = Math.floor((remaining / 1000) % 60);
 
-        const percent = ((total - remaining) / total) * 100;
+        const percent = Math.min((elapsed / total) * 100, 100);
         bar.style.width = percent.toFixed(2) + "%";
+        percentText.textContent = percent.toFixed(1) + "% klart";
 
         box.textContent = `SOMMARLOV om ${days}d ${hours}h ${minutes}m ${seconds}s`;
         setTimeout(update, 1000);
