@@ -7,7 +7,7 @@
       background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGhrYTBiajcxcGhndjB3bGYzbXliZ2xvNm05eTVlenE4bHA5dHNzMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kEiKcedFkd5Zy2JbUa/giphy.gif');
       background-size: cover;
       background-position: center;
-      background-position-y: 30%;
+      background-position-y: 0%;
       background-repeat: no-repeat;
       color: #FFFFFF;
       font-size: 48px;
@@ -105,7 +105,14 @@
       }, 5000);
     }
 
-    update();
+    update(const percent = Math.min((elapsed / total) * 100, 100);
+const color = getColorByPercent(percent);
+
+bar.style.width = percent.toFixed(2) + "%";
+bar.style.backgroundColor = color;
+percentText.style.color = color;
+box.style.color = color;
+);
   </script>
 </body>
 </html>
