@@ -4,18 +4,17 @@
   <title>Nedräkning</title>
   <style>
     body {
-  background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGhrYTBiajcxcGhndjB3bGYzbXliZ2xvNm05eTVlenE4bHA5dHNzMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kEiKcedFkd5Zy2JbUa/giphy.gif');
-  background-size: cover;
-  background-position: center;
-  background-position-y: 0%;
-  background-repeat: no-repeat;
-  color: #FFFFFF;
-  font-size: 48px;
-  text-align: center;
-  padding-top: 10%;
-  font-family: sans-serif;
-}
-
+      background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGhrYTBiajcxcGhndjB3bGYzbXliZ2xvNm05eTVlenE4bHA5dHNzMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kEiKcedFkd5Zy2JbUa/giphy.gif');
+      background-size: cover;
+      background-position: center;
+      background-position-y: 30%;
+      background-repeat: no-repeat;
+      color: #FFFFFF;
+      font-size: 48px;
+      text-align: center;
+      padding-top: 10%;
+      font-family: sans-serif;
+    }
 
     #progress-container {
       width: 80%;
@@ -37,6 +36,17 @@
       font-size: 32px;
       margin-bottom: 10px;
     }
+
+    button {
+      font-size: 24px;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      border: none;
+      background-color: #ffcc00;
+      color: black;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -45,44 +55,56 @@
   <div id="progress-container">
     <div id="progress-bar"></div>
   </div>
+  <button onclick="triggerFakeCountdown()">Testa 3 sekunder</button>
 
   <script>
-    window.onload = function () {
-      const startDate = new Date(2025, 4, 15, 0, 0); // 15 maj 2025
-      const endDate = new Date(2025, 5, 12, 8, 10);  // 12 juni 2025 kl. 08:10
+    const startDate = new Date(2025, 4, 15, 0, 0); // 15 maj 2025
+    let endDate = new Date(2025, 5, 12, 8, 10);    // 12 juni 2025 kl. 08:10
+    const realEndDate = new Date(endDate.getTime()); // spara original tid
 
-      const box = document.getElementById("timerbox");
-      const bar = document.getElementById("progress-bar");
-      const percentText = document.getElementById("percent-text");
+    const box = document.getElementById("timerbox");
+    const bar = document.getElementById("progress-bar");
+    const percentText = document.getElementById("percent-text");
 
-      function update() {
-        const now = new Date();
-        const total = endDate - startDate;
-        const remaining = endDate - now;
-        const elapsed = now - startDate;
+    function update() {
+      const now = new Date();
+      const total = endDate - startDate;
+      const remaining = endDate - now;
+      const elapsed = now - startDate;
 
-        if (remaining <= 0) {
-          box.textContent = "SOMMARLOV";
-          bar.style.width = "100%";
-          percentText.textContent = "100% klart!";
-          return;
-        }
+      if (remaining <= 0) {
+  box.textContent = "SOMMARLOV";
+  bar.style.width = "100%";
+  percentText.textContent = "100% klart!";
+  document.body.style.backgroundImage = "url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExejM4b3VkYXNnZm5wNHBzZHgyZzRneHZiMXo4ZXA2ZGxrODd2MHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26tOZ42Mg6pbTUPHW/giphy.gif')";
+  document.body.style.backgroundPosition = "center";
+  document.body.style.backgroundSize = "cover";
+  return;
+}
 
-        const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((remaining / (1000 * 60)) % 60);
-        const seconds = Math.floor((remaining / 1000) % 60);
 
-        const percent = Math.min((elapsed / total) * 100, 100);
-        bar.style.width = percent.toFixed(2) + "%";
-        percentText.textContent = percent.toFixed(1) + "% klart";
+      const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((remaining / (1000 * 60)) % 60);
+      const seconds = Math.floor((remaining / 1000) % 60);
 
-        box.textContent = `SOMMARLOV om ${days}d ${hours}h ${minutes}m ${seconds}s`;
-        setTimeout(update, 1000);
-      }
+      const percent = Math.min((elapsed / total) * 100, 100);
+      bar.style.width = percent.toFixed(2) + "%";
+      percentText.textContent = percent.toFixed(1) + "% klart";
 
-      update();
-    };
+      box.textContent = `SOMMARLOV om ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      setTimeout(update, 1000);
+    }
+
+    function triggerFakeCountdown() {
+      const now = new Date();
+      endDate = new Date(now.getTime() + 3000); // 3 sekunder från nu
+      setTimeout(() => {
+        endDate = new Date(realEndDate.getTime()); // korrekt återställning
+      }, 5000);
+    }
+
+    update();
   </script>
 </body>
 </html>
