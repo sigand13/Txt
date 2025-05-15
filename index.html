@@ -8,41 +8,64 @@
       color: #FFFFFF;
       font-size: 48px;
       text-align: center;
-      padding-top: 20%;
+      padding-top: 10%;
       font-family: sans-serif;
+    }
+
+    #progress-container {
+      width: 80%;
+      height: 40px;
+      background-color: #444;
+      border-radius: 20px;
+      margin: 40px auto;
+      overflow: hidden;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: #00FF00;
+      transition: width 1s linear;
     }
   </style>
 </head>
 <body>
   <div id="timerbox">Laddar...</div>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
   <script>
     window.onload = function () {
-      function startCountdown(targetDate, message) {
-        const box = document.getElementById("timerbox");
+     const startDate = new Date(2025, 4, 15, 0, 0); // 15 maj 2025 kl. 00:00
+      const endDate = new Date(2025, 5, 12, 8, 10); // 12 juni 2025 kl. 08:10
+      const box = document.getElementById("timerbox");
+      const bar = document.getElementById("progress-bar");
 
-        function update() {
-          const now = new Date();
-          const diff = targetDate - now;
+      function update() {
+        const now = new Date();
+        const total = endDate - startDate;
+        const remaining = endDate - now;
 
-          if (diff <= 0) {
-            box.textContent = message;
-            return;
-          }
-
-          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-          const minutes = Math.floor((diff / (1000 * 60)) % 60);
-          const seconds = Math.floor((diff / 1000) % 60);
-
-          box.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-          setTimeout(update, 1000);
+        if (remaining <= 0) {
+          box.textContent = "SOMMARLOV";
+          bar.style.width = "100%";
+          return;
         }
 
-        update();
+        const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((remaining / (1000 * 60)) % 60);
+        const seconds = Math.floor((remaining / 1000) % 60);
+
+        const percent = ((total - remaining) / total) * 100;
+        bar.style.width = percent.toFixed(2) + "%";
+
+        box.textContent = `SOMMARLOV om ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        setTimeout(update, 1000);
       }
 
-      const sommarlov = new Date(2025, 5, 12, 8, 10); // 12 juni 2025 kl. 08:10
-      startCountdown(sommarlov, "SOMMARLOV!!!!!!!!");
+      update();
     };
   </script>
 </body>
