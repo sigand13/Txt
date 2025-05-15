@@ -7,7 +7,7 @@
       background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGhrYTBiajcxcGhndjB3bGYzbXliZ2xvNm05eTVlenE4bHA5dHNzMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kEiKcedFkd5Zy2JbUa/giphy.gif');
       background-size: cover;
       background-position: center;
-      background-position-y: 0%;
+      background-position-y: 30%;
       background-repeat: no-repeat;
       color: #FFFFFF;
       font-size: 48px;
@@ -66,6 +66,35 @@
     const bar = document.getElementById("progress-bar");
     const percentText = document.getElementById("percent-text");
 
+    const gradientColors = [
+      [255, 0, 0],      // röd (0%)
+      [255, 165, 0],    // orange (~25%)
+      [255, 255, 0],    // gul (~50%)
+      [173, 255, 47],   // gulgrön (~75%)
+      [0, 255, 0]       // grön (100%)
+    ];
+
+    function lerpColor(a, b, t) {
+      return a.map((v, i) => Math.round(v + (b[i] - v) * t));
+    }
+
+    function rgbToHex(rgb) {
+      return '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+
+    function getColorByPercent(percent) {
+      const t = percent / 100;
+      const segments = gradientColors.length - 1;
+      const scaledT = t * segments;
+      const i = Math.floor(scaledT);
+      const frac = scaledT - i;
+      if (i >= segments) return rgbToHex(gradientColors[segments]);
+      const c1 = gradientColors[i];
+      const c2 = gradientColors[i + 1];
+      const c = lerpColor(c1, c2, frac);
+      return rgbToHex(c);
+    }
+
     function update() {
       const now = new Date();
       const total = endDate - startDate;
@@ -73,16 +102,14 @@
       const elapsed = now - startDate;
 
       if (remaining <= 0) {
-  box.textContent = "SOMMARLOV";
-  bar.style.width = "100%";
-  percentText.textContent = "100% klart!";
-  document.body.style.backgroundImage = "url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExejM4b3VkYXNnZm5wNHBzZHgyZzRneHZiMXo4ZXA2ZGxrODd2MHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26tOZ42Mg6pbTUPHW/giphy.gif')";
-  document.body.style.backgroundPosition = "center";
-  background-position-y: 30%;
-  document.body.style.backgroundSize = "cover";
-  return;
-}
-
+        box.textContent = "SOMMARLOV";
+        bar.style.width = "100%";
+        percentText.textContent = "100% klart!";
+        document.body.style.backgroundImage = "url('https://i.pinimg.com/originals/ec/c2/12/ecc2124116aa5a0ee1bc466c7b69dd8a.gif')";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundSize = "cover";
+        return;
+      }
 
       const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
       const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
@@ -90,8 +117,12 @@
       const seconds = Math.floor((remaining / 1000) % 60);
 
       const percent = Math.min((elapsed / total) * 100, 100);
+      const color = getColorByPercent(percent);
+
       bar.style.width = percent.toFixed(2) + "%";
-      percentText.textContent = percent.toFixed(1) + "% klart";
+      bar.style.backgroundColor = color;
+      percentText.style.color = color;
+      box.style.color = color;
 
       box.textContent = `SOMMARLOV om ${days}d ${hours}h ${minutes}m ${seconds}s`;
       setTimeout(update, 1000);
@@ -105,14 +136,7 @@
       }, 5000);
     }
 
-    update(const percent = Math.min((elapsed / total) * 100, 100);
-const color = getColorByPercent(percent);
-
-bar.style.width = percent.toFixed(2) + "%";
-bar.style.backgroundColor = color;
-percentText.style.color = color;
-box.style.color = color;
-);
+    update();
   </script>
 </body>
 </html>
