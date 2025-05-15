@@ -7,7 +7,6 @@
       background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGhrYTBiajcxcGhndjB3bGYzbXliZ2xvNm05eTVlenE4bHA5dHNzMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kEiKcedFkd5Zy2JbUa/giphy.gif');
       background-size: cover;
       background-position: center;
-      background-position-y: 0%;
       background-repeat: no-repeat;
       color: #FFFFFF;
       font-size: 48px;
@@ -67,11 +66,11 @@
     const percentText = document.getElementById("percent-text");
 
     const gradientColors = [
-      [255, 0, 0],      // röd (0%)
-      [255, 165, 0],    // orange (~25%)
-      [255, 255, 0],    // gul (~50%)
-      [173, 255, 47],   // gulgrön (~75%)
-      [0, 255, 0]       // grön (100%)
+      [255, 0, 0],      // röd
+      [255, 165, 0],    // orange
+      [255, 255, 0],    // gul
+      [173, 255, 47],   // gulgrön
+      [0, 255, 0]       // grön
     ];
 
     function lerpColor(a, b, t) {
@@ -123,6 +122,7 @@
       bar.style.backgroundColor = color;
       percentText.style.color = color;
       box.style.color = color;
+      percentText.textContent = percent.toFixed(2) + "% klart";
 
       box.textContent = `SOMMARLOV om ${days}d ${hours}h ${minutes}m ${seconds}s`;
       setTimeout(update, 1000);
@@ -132,7 +132,7 @@
       const now = new Date();
       endDate = new Date(now.getTime() + 3000); // 3 sekunder från nu
       setTimeout(() => {
-        endDate = new Date(realEndDate.getTime()); // korrekt återställning
+        endDate = new Date(realEndDate.getTime());
       }, 5000);
     }
 
